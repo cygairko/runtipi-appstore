@@ -16,7 +16,7 @@
   "website": "https://papra.app/",
   "form_fields": [
     {
-      "type": "random",
+      "type": "text",
       "label": "Auth Secret",
       "max": 48,
       "min": 48,
@@ -30,7 +30,7 @@
       "env_variable": "PAPRA_INTAKE_EMAILS_IS_ENABLED"
     },
     {
-      "type": "random",
+      "type": "text",
       "label": "Intake Emails Webhook Secret (only if Intake Emails are enabled)",
       "max": 42,
       "min": 42,
