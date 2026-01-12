@@ -7,7 +7,7 @@
   "dynamic_config": true,
   "id": "papra",
   "description": "Papra is an open-source document management platform designed to help you organize, secure, and archive your files effortlessly.",
-  "tipi_version": 3,
+  "tipi_version": 1,
   "version": "25.12.0",
   "categories": ["utilities"],
   "short_desc": "Open-source document management platform.",
@@ -16,9 +16,8 @@
   "website": "https://papra.app/",
   "form_fields": [
     {
-      "type": "text",
+      "type": "random",
       "label": "Auth Secret",
-      "max": 48,
       "min": 48,
       "required": true,
       "env_variable": "PAPRA_AUTH_SECRET"
