@@ -1,0 +1,53 @@
+{
+  "name": "Papra",
+  "min_tipi_version": "4.5.0",
+  "available": true,
+  "port": 1221,
+  "exposable": true,
+  "dynamic_config": true,
+  "id": "papra",
+  "description": "Papra is an open-source document management platform designed to help you organize, secure, and archive your files effortlessly.",
+  "tipi_version": 3,
+  "version": "25.12.0",
+  "categories": ["utilities"],
+  "short_desc": "Open-source document management platform.",
+  "author": "papra",
+  "source": "https://github.com/papra-hq/papra",
+  "website": "https://papra.app/",
+  "form_fields": [
+    {
+      "type": "random",
+      "label": "Auth Secret",
+      "max": 48,
+      "min": 48,
+      "required": true,
+      "env_variable": "PAPRA_AUTH_SECRET"
+    },
+    {
+      "type": "boolean",
+      "label": "Enable Intake Emails",
+      "required": true,
+      "env_variable": "PAPRA_INTAKE_EMAILS_IS_ENABLED"
+    },
+    {
+      "type": "random",
+      "label": "Intake Emails Webhook Secret (only if Intake Emails are enabled)",
+      "max": 42,
+      "min": 42,
+      "required": false,
+      "env_variable": "PAPRA_INTAKE_EMAILS_WEBHOOK_SECRET"
+    },
+    {
+      "type": "text",
+      "label": "Owlrelay API Key (only if Intake Emails are enabled)",
+      "max": 47,
+      "min": 47,
+      "required": false,
+      "placeholder": "owrl_ ...",
+      "env_variable": "PAPRA_OWLRELAY_API_KEY"
+    }
+  ],
+  "supported_architectures": ["arm64", "amd64"],
+  "created_at": 1691943801422,
+  "updated_at": 1729872794208
+}

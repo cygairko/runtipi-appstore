@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/dynamic-compose.json",
+  "services": [
+    {
+      "name": "papra",
+      "image": "ghcr.io/papra-hq/papra:25.12.0",
+      "internalPort": 1221,
+      "isMain": true,
+      "environment": [
+        {
+          "key": "AUTH_SECRET",
+          "value": "${PAPRA_AUTH_SECRET}"
+        },
+        {
+          "key": "APP_BASE_URL",
+          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}"
+        },
+        {
+          "key": "INTAKE_EMAILS_IS_ENABLED",
+          "value": "${PAPRA_INTAKE_EMAILS_IS_ENABLED}"
+        },
+        {
+          "key": "INTAKE_EMAILS_DRIVER",
+          "value": "owlrelay"
+        },
+        {
+          "key": "INTAKE_EMAILS_WEBHOOK_SECRET",
+          "value": "${PAPRA_INTAKE_EMAILS_WEBHOOK_SECRET}"
+        },
+        {
+          "key": "OWLRELAY_API_KEY",
+          "value": "${PAPRA_OWLRELAY_API_KEY}"
+        },
+        {
+          "key": "OWLRELAY_WEBHOOK_URL",
+          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}/api/intake-emails/ingest"
+        }
+      ],
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/papra",
+          "containerPath": "/app/app-data"
+        }
+      ]
+    }
+  ]
+}
