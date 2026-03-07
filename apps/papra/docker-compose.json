@@ -4,7 +4,7 @@
   "services": [
     {
       "name": "papra",
-      "image": "ghcr.io/papra-hq/papra:25.12.0-rootless",
+      "image": "ghcr.io/papra-hq/papra:26.2.2-rootless",
       "internalPort": 1221,
       "isMain": true,
       "environment": [
