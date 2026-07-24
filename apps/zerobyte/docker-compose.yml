@@ -5,8 +5,9 @@ services:
       - '/var/lib/zerobyte/:/var/lib/zerobyte'
       - '/etc/localtime:/etc/localtime:ro'
     environment:
-      - 'TZ=${TZ}'
-      - 'BASE_URL=${APP_PROTOCOL}://${APP_DOMAIN}'
+      - TZ=${TZ}
+      - BASE_URL=${APP_PROTOCOL:-http}://${APP_DOMAIN}
+      - APP_SECRET=${ZEROBYTE_APP_SECRET}
     cap_add:
       - 'SYS_ADMIN'
     devices:

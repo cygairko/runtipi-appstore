@@ -19,7 +19,14 @@
     {
       "type": "text",
       "label": "Timezone",
-      "env_variable": "TIMEZONE"
+      "env_variable": "TZ"
+    },
+    {
+      "type": "random",
+      "label": "App Secret",
+      "min": 64,
+      "required": true,
+      "env_variable": "ZEROBYTE_APP_SECRET"
     }
   ]
 }
