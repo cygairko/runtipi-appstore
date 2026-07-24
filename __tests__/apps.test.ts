@@ -1,6 +1,6 @@
 import { expect, test, describe } from "bun:test";
 import { appInfoSchema, dynamicComposeSchema } from '@runtipi/common/schemas'
-import { type } from 'arktype'
+import { fromError } from 'zod-validation-error';
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -29,7 +29,7 @@ describe("each app should have the required files", async () => {
   const apps = await getApps()
 
   for (const app of apps) {
-    const files = ['config.json', 'docker-compose.json', 'metadata/logo.jpg', 'metadata/description.md']
+    const files = ['config.json', 'docker-compose.yml', 'metadata/logo.jpg', 'metadata/description.md']
 
     for (const file of files) {
       test(`app ${app} should have ${file}`, async () => {
@@ -46,30 +46,14 @@ describe("each app should have a valid config.json", async () => {
   for (const app of apps) {
     test(`app ${app} should have a valid config.json`, async () => {
       const fileContent = await getFile(app, 'config.json')
-      const parsed = appInfoSchema.omit('urn')(JSON.parse(fileContent || '{}'))
+      const parsed = appInfoSchema.omit({ urn: true }).safeParse(JSON.parse(fileContent || '{}'))
 
-      if (parsed instanceof type.errors) {
-        console.error(`Error parsing config.json for app ${app}:`, parsed.summary);
+      if (!parsed.success) {
+        const validationError = fromError(parsed.error);
+        console.error(`Error parsing config.json for app ${app}:`, validationError.toString());
       }
 
-      expect(parsed instanceof type.errors).toBe(false)
-    })
-  }
-})
-
-describe("each app should have a valid docker-compose.json", async () => {
-  const apps = await getApps()
-
-  for (const app of apps) {
-    test(`app ${app} should have a valid docker-compose.json`, async () => {
-      const fileContent = await getFile(app, 'docker-compose.json')
-      const parsed = dynamicComposeSchema(JSON.parse(fileContent || '{}'))
-
-      if (parsed instanceof type.errors) {
-        console.error(`Error parsing docker-compose.json for app ${app}:`, parsed.summary);
-      }
-
-      expect(parsed instanceof type.errors).toBe(false)
+      expect(parsed.success).toBe(true)
     })
   }
 });

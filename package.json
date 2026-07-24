@@ -18,6 +18,7 @@
     "@runtipi/common": "^0.8.0",
     "arktype": "^2.2.3",
     "bun": "^1.2.10",
+    "js-yaml": "^5.2.2",
     "zod-validation-error": "^3.4.0"
   },
   "peerDependencies": {
