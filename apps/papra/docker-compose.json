@@ -1,10 +1,9 @@
 {
   "schemaVersion": 2,
-  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
   "services": [
     {
       "name": "papra",
-      "image": "ghcr.io/papra-hq/papra:26.2.2-rootless",
+      "image": "ghcr.io/papra-hq/papra:26.6.1-rootless",
       "internalPort": 1221,
       "isMain": true,
       "environment": [
@@ -14,7 +13,8 @@
         { "key": "INTAKE_EMAILS_DRIVER", "value": "owlrelay" },
         { "key": "INTAKE_EMAILS_WEBHOOK_SECRET", "value": "${PAPRA_INTAKE_EMAILS_WEBHOOK_SECRET}" },
         { "key": "OWLRELAY_API_KEY", "value": "${PAPRA_OWLRELAY_API_KEY}" },
-        { "key": "OWLRELAY_WEBHOOK_URL", "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}/api/intake-emails/ingest" }
+        { "key": "OWLRELAY_WEBHOOK_URL", "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}/api/intake-emails/ingest" },
+        { "key": "TRUSTED_ORIGINS", "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}" }
       ],
       "volumes": [
         {
