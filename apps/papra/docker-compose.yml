@@ -1,0 +1,21 @@
+services:
+  papra:
+    image: ghcr.io/papra-hq/papra:26.6.1-rootless
+    container_name: papra
+    environment:
+      - AUTH_SECRET=${PAPRA_AUTH_SECRET}
+      - APP_BASE_URL=${APP_PROTOCOL:-http}://${APP_DOMAIN}
+      - INTAKE_EMAILS_IS_ENABLED=${PAPRA_INTAKE_EMAILS_IS_ENABLED}
+      - INTAKE_EMAILS_DRIVER=owlrelay
+      - INTAKE_EMAILS_WEBHOOK_SECRET=${PAPRA_INTAKE_EMAILS_WEBHOOK_SECRET}
+      - OWLRELAY_API_KEY=${PAPRA_OWLRELAY_API_KEY}
+      - OWLRELAY_WEBHOOK_URL=${APP_PROTOCOL:-http}://${APP_DOMAIN}/api/intake-emails/ingest
+      - TRUSTED_ORIGINS=${APP_PROTOCOL:-http}://${APP_DOMAIN}
+    volumes:
+      - ${APP_DATA_DIR}/data/papra:/app/app-data
+    x-runtipi:
+      is_main: true
+      internal_port: 1221
+
+x-runtipi:
+  schema_version: 2

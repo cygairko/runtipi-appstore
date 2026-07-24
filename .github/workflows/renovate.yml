@@ -1,4 +1,5 @@
 name: Renovate
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,8 +13,21 @@ on:
           - WARN
           - ERROR
           - FATAL
+      dry_run:
+        type: boolean
+        description: Dry run (don't open PRs)
+        default: false
   schedule:
+    # Every day at 02:00 UTC
     - cron: 0 2 * * *
+
+concurrency:
+  group: renovate
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   renovate:
@@ -25,21 +39,31 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          # Renovate (v43+) requires Node >= 24.11.0
+          node-version: '24'
 
       - name: Install bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Cache Bun global packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun/install/global
-          key: ${{ runner.os }}-bun-global-renovate-40
-          restore-keys: |
-            ${{ runner.os }}-bun-global-
-
+      # re2 is required by Renovate's regex custom manager, which is how the
+      # image tags in each app's docker-compose.json are discovered.
       - name: Install Renovate
-        run: bun install -g renovate@40
+        run: bun install -g renovate re2
 
-      - name: Run renovate
-        run: LOG_LEVEL=${{ github.event.inputs.log_level || 'INFO' }} renovate --token ${{ secrets.GITHUB_TOKEN }} ${{ github.repository }}
+      - name: Run Renovate
+        run: renovate ${{ github.repository }}
+        env:
+          # A classic PAT (repo scope) as RENOVATE_TOKEN is recommended so that
+          # PRs opened by Renovate also trigger the Test workflow. Without it we
+          # fall back to GITHUB_TOKEN, which can open PRs but will not trigger
+          # other workflows (GitHub prevents that recursion).
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN || secrets.GITHUB_TOKEN }}
+          LOG_LEVEL: ${{ github.event.inputs.log_level || 'INFO' }}
+          RENOVATE_DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && 'full' || '' }}
+          # Self-hosted admin config. postUpgradeTasks in renovate.json (which
+          # bump tipi_version via scripts/update-config.ts and run the tests)
+          # are only executed when the commands are explicitly allow-listed
+          # here — this cannot be configured from renovate.json for security.
+          RENOVATE_ALLOWED_COMMANDS: '["^bun "]'
+          RENOVATE_ALLOW_POST_UPGRADE_COMMAND_TEMPLATING: 'true'
+          RENOVATE_ALLOW_SCRIPTS: 'true'

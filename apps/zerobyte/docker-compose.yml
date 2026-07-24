@@ -1,0 +1,16 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:0.41.0
+    container_name: zerobyte
+    environment:
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ${APP_DATA_DIR}/var/lib/zerobyte:/var/lib/zerobyte
+      - ${ROOT_FOLDER_HOST}/:/runtipi
+    x-runtipi:
+      is_main: true
+      internal_port: 4096
+
+x-runtipi:
+  schema_version: 2
