@@ -1,6 +1,6 @@
 services:
   papra:
-    image: ghcr.io/papra-hq/papra:26.6.1-rootless
+    image: ghcr.io/papra-hq/papra:26.7.1-rootless
     container_name: papra
     environment:
       - AUTH_SECRET=${PAPRA_AUTH_SECRET}
